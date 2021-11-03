@@ -28,6 +28,7 @@ def protocVersion = protobufVersion
 
 dependencies {
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     compileOnly "org.apache.tomcat:annotations-api:6.0.53"
 
@@ -80,6 +81,13 @@ task routeGuideClient(type: CreateStartScripts) {
 task helloWorldServer(type: CreateStartScripts) {
     mainClassName = 'io.grpc.examples.helloworld.HelloWorldServer'
     applicationName = 'hello-world-server'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+task vulnerableServer(type: CreateStartScripts) {
+    mainClassName = 'io.vulnerable.VulnerableServer'
+    applicationName = 'vulnerable-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
@@ -144,6 +152,7 @@ applicationDistribution.into('bin') {
     from(routeGuideServer)
     from(routeGuideClient)
     from(helloWorldServer)
+    from(vulnerableServer)
     from(helloWorldClient)
     from(hedgingHelloWorldClient)
     from(hedgingHelloWorldServer)
